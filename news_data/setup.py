@@ -16,12 +16,6 @@ requires = [
     'waitress',
 ]
 
-tests_require = [
-    'WebTest',
-    'pytest',
-    'pytest-cov',
-]
-
 setup(
     name='news_data',
     version='0.0',
@@ -40,9 +34,6 @@ setup(
     packages=find_packages(exclude=['tests']),
     include_package_data=True,
     zip_safe=False,
-    extras_require={
-        'testing': tests_require,
-    },
     install_requires=requires,
     entry_points={
         'paste.app_factory': [
