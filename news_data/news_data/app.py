@@ -25,16 +25,17 @@ def get_data():
 def news(request):
     sources = get_data()
     futures = []
+    response = []
+    
     with ThreadPoolExecutor() as executor:
-
         for source in sources:
             futures.append(executor.submit(requests.get, url=source["url"]))
 
         for future in as_completed(futures):
-            print(future.result())
+            response.append(future.result().json())
 
     request.response.status = 200
-    return {}
+    return response
 
 
 def includeme(config):
