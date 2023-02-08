@@ -1,26 +1,29 @@
 import requests
+import os
 from pyramid.view import view_config
 from concurrent.futures import ThreadPoolExecutor, as_completed
-from news_data.lib import get_url
 
+API_KEY = os.environ.get("NEWS_API_KEY")
 SOURCES = [
     {
         "name": "tesla",
-        "url": get_url(topic="tesla"),
+        "url": f"https://newsapi.org/v2/everything?q=tesla&sortBy=publishedAt&apiKey={API_KEY}",
     },
     {
         "name": "bitcoin",
-        "url": get_url(topic="bitcoin"),
+        "url": f"https://newsapi.org/v2/everything?q=bitcoin&sortBy=publishedAt&apiKey={API_KEY}",
     },
     {
         "name": "microsoft",
-        "url": get_url(topic="microsoft"),
+        "url": f"https://newsapi.org/v2/everything?q=microsoft&sortBy=publishedAt&apiKey={API_KEY}",
     },
 ]
 
 
 @view_config(route_name="news", renderer="json")
 def news(request):
+    if not API_KEY:
+        return {"error": "API key missing"}
 
     with ThreadPoolExecutor() as executor:
         future_to_news_data = {
